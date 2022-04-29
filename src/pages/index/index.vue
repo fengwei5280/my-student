@@ -2,6 +2,7 @@
 	<view class="content">
 		<image class="logo" src="/static/logo.png"></image>
 		<view>
+			121211
 			<text class="title">{{title}}</text>
 		</view>
 	</view>
