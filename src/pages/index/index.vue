@@ -14,10 +14,9 @@
 </template>
 
 <script>
-import { uniCard, uniList, uniIcons, uniListItem } from "@dcloudio/uni-ui";
 import UserList from './components/list.vue'
 export default {
-  components: { uniCard, uniList, uniIcons, uniListItem,UserList },
+  components: { UserList },
   data() {
     return {
       userInfo: {

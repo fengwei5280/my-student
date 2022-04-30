@@ -44,6 +44,13 @@
               placeholder="请输入年龄"
             />
           </uni-forms-item>
+          <uni-forms-item label="日期时间">
+            <uni-datetime-picker
+              type="date"
+              return-type="date"
+              v-model="checkdate"
+            />
+          </uni-forms-item>
           <uni-forms-item label="三码合一" required>
             <uni-file-picker
               v-model="baseFormData.imageValue"
@@ -60,23 +67,7 @@
   </view>
 </template>
 <script>
-import {
-  uniCard,
-  uniForms,
-  uniFormsItem,
-  uniEasyinput,
-  uniDataCheckbox,
-  uniFilePicker,
-} from "@dcloudio/uni-ui";
 export default {
-  components: {
-    uniCard,
-    uniForms,
-    uniFormsItem,
-    uniEasyinput,
-    uniDataCheckbox,
-    uniFilePicker,
-  },
   data() {
     return {
       // 基础表单数据
@@ -88,9 +79,10 @@ export default {
         imageValue: [],
         number: "",
         phone: "",
-		address:"",
+        address: "",
         datetimesingle: 1627529992399,
       },
+      checkdate: "",
       // 自定义表单校验规则
       customRules: {
         name: {
@@ -141,59 +133,6 @@ export default {
           value: 1,
         },
       ],
-      // 多选数据源
-      hobbys: [
-        {
-          text: "跑步",
-          value: 0,
-        },
-        {
-          text: "游泳",
-          value: 1,
-        },
-        {
-          text: "绘画",
-          value: 2,
-        },
-        {
-          text: "足球",
-          value: 3,
-        },
-        {
-          text: "篮球",
-          value: 4,
-        },
-        {
-          text: "其他",
-          value: 5,
-        },
-      ],
-      // 分段器数据
-      current: 0,
-      items: ["左对齐", "顶部对齐"],
-      // 校验规则
-      rules: {
-        name: {
-          rules: [
-            {
-              required: true,
-              errorMessage: "姓名不能为空",
-            },
-          ],
-        },
-        age: {
-          rules: [
-            {
-              required: true,
-              errorMessage: "年龄不能为空",
-            },
-            {
-              format: "number",
-              errorMessage: "年龄只能输入数字",
-            },
-          ],
-        },
-      },
     };
   },
   computed: {
@@ -204,9 +143,16 @@ export default {
       return "left";
     },
   },
+  onShow() {
+    const checkdate = uni.getStorageSync("checkdate");
+    if (checkdate) {
+      this.checkdate = checkdate;
+    }
+  },
   onLoad() {},
   onReady() {
     // 设置自定义表单校验规则，必须在节点渲染完毕后执行
+    console.log("readyyyy");
     this.$refs.baseForm.setRules(this.customRules);
   },
   methods: {

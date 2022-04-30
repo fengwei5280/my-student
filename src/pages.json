@@ -11,6 +11,18 @@
 			"style": {
 				"navigationBarTitleText": "check"
 			}
+		},
+		{
+			"path": "pages/index/components/aa/index",
+			"style": {
+				"navigationBarTitleText": "aa"
+			}
+		},
+		{
+			"path": "pages/check/aa/index",
+			"style": {
+				"navigationBarTitleText": "aa"
+			}
 		}
 	],
 	"globalStyle": {
@@ -23,7 +35,8 @@
 		"selectedColor": "#456fff",
 		"borderStyle": "black",
 		"backgroundColor": "#F8F8F8",
-		"list": [{
+		"list": [
+			{
 				"pagePath": "pages/index/index",
 				"iconPath": "static/home.png",
 				"selectedIconPath": "static/homeHL.png",
