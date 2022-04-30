@@ -11,39 +11,6 @@
           :rules="customRules"
           :modelValue="baseFormData"
         >
-          <uni-forms-item label="姓名" required>
-            <uni-easyinput
-              v-model="baseFormData.name"
-              placeholder="请输入姓名"
-            />
-          </uni-forms-item>
-          <uni-forms-item label="年龄" required>
-            <uni-easyinput
-              v-model="baseFormData.age"
-              placeholder="请输入年龄"
-            />
-          </uni-forms-item>
-          <uni-forms-item label="性别" required>
-            <uni-data-checkbox v-model="baseFormData.sex" :localdata="sexs" />
-          </uni-forms-item>
-          <uni-forms-item label="学号" required>
-            <uni-easyinput
-              v-model="baseFormData.number"
-              placeholder="请输入年龄"
-            />
-          </uni-forms-item>
-          <uni-forms-item label="手机号" required>
-            <uni-easyinput
-              v-model="baseFormData.phone"
-              placeholder="请输入年龄"
-            />
-          </uni-forms-item>
-          <uni-forms-item label="居住地址" required>
-            <uni-easyinput
-              v-model="baseFormData.address"
-              placeholder="请输入年龄"
-            />
-          </uni-forms-item>
           <uni-forms-item label="日期时间">
             <uni-datetime-picker
               type="date"
@@ -75,7 +42,7 @@ export default {
         name: "",
         age: "",
         introduction: "",
-        sex: 0,
+        sex: 0, 
         imageValue: [],
         number: "",
         phone: "",
@@ -117,22 +84,6 @@ export default {
           ],
         },
       },
-      // 表单数据
-      alignmentFormData: {
-        name: "",
-        age: "",
-      },
-      // 单选数据源
-      sexs: [
-        {
-          text: "男",
-          value: 0,
-        },
-        {
-          text: "女",
-          value: 1,
-        },
-      ],
     };
   },
   computed: {

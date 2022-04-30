@@ -1,7 +1,12 @@
 <script>
 	export default {
 		onLaunch: function() {
-			console.log('App Launch')
+			let user = uni.getStorageSync("user")
+			if(!user){
+				uni.redirectTo({
+					url:'pages/login/index'
+				})
+			}
 		},
 		onShow: function() {
 			console.log('App Show')

@@ -13,15 +13,15 @@
 			}
 		},
 		{
-			"path": "pages/index/components/aa/index",
+			"path": "pages/login/index",
 			"style": {
-				"navigationBarTitleText": "aa"
+				"navigationBarTitleText": "登录"
 			}
 		},
 		{
-			"path": "pages/check/aa/index",
+			"path": "pages/login/register/index",
 			"style": {
-				"navigationBarTitleText": "aa"
+				"navigationBarTitleText": "注册页"
 			}
 		}
 	],
