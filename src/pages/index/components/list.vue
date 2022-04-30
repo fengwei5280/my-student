@@ -58,7 +58,7 @@ export default {
         insert: false,
       },
       selected: [
-        { date: "2022-04-03", info: "签到", data: { custom: "122" } },
+        { date: "2022-04-03", info: "异常", normal:2, data: { custom: "122" } },
         { date: "2022-05-01", info: "签到" },
       ],
       cover: "/static/hesuan.jpeg",
