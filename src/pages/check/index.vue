@@ -11,7 +11,7 @@
           :rules="customRules"
           :modelValue="baseFormData"
         >
-          <uni-forms-item label="日期时间">
+          <uni-forms-item label="打卡时间">
             <uni-datetime-picker
               type="date"
               return-type="date"
