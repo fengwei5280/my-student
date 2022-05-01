@@ -61,7 +61,7 @@ export default {
         value: 1,
       },
     ],
-    teachers:[
+    teachers: [
       {
         text: "教师",
         value: 1,
@@ -120,8 +120,14 @@ export default {
   methods: {
     submit() {
       this.$refs["baseForm"].validate().then(() => {
+        const res = uni.getSystemInfoSync();
+        // "http://127.0.0.1:7000/api/addUser"
+        let url = res.SDKVersion
+          ? "http://127.0.0.1:7000/api/addUser"
+          : "/api/addUser";
+        console.log(res);
         uni.request({
-          url: "/api/addUser", //仅为示例，并非真实接口地址。
+          url, //仅为示例，并非真实接口地址。
           data: {
             user: this.user,
           },

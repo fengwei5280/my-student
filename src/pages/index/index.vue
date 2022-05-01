@@ -6,6 +6,7 @@
       :extra="userInfo.tel"
       style="width: 100%"
       :thumbnail="userInfo.icon"
+      @click="goDetail"
     >
       <text>{{
         userInfo.teacher == 1 ? userInfo.desc : "好好学习，天天向上"
@@ -55,7 +56,17 @@ export default {
     }
   },
   onLoad() {},
-  methods: {},
+  methods: {
+    goDetail() {
+      console.log(1212)
+      uni.redirectTo({
+        url: "./../login/index",
+        fail: (e) => {
+          console.log("11", e);
+        },
+      });
+    }
+  },
 };
 </script>
 

@@ -2,7 +2,7 @@
   <uni-section title="我的打卡" type="line">
     <uni-card padding="0" spacing="0">
       <template v-slot:cover>
-        <view class="custom-cover">
+        <view class="custom-cover" >
           <image class="cover-image" mode="aspectFill" :src="cover"> </image>
           <!-- <view class="cover-content">
             <text class="uni-subtitle uni-white">打卡情况</text>
@@ -10,7 +10,7 @@
         </view>
       </template>
       <view class="card-actions no-border">
-        <view class="card-actions-item" @click="actionsClick('分享')">
+        <view class="card-actions-item" @click="goCheck">
           <uni-icons type="chatboxes" size="23" color="#999"></uni-icons>
           <text class="card-actions-item-text">上报</text>
         </view>
@@ -58,7 +58,12 @@ export default {
         insert: false,
       },
       selected: [
-        { date: "2022-04-03", info: "异常", normal:2, data: { custom: "122" } },
+        {
+          date: "2022-04-03",
+          info: "异常",
+          normal: 2,
+          data: { custom: "122" },
+        },
         { date: "2022-05-01", info: "签到" },
       ],
       cover: "/static/hesuan.jpeg",
@@ -76,8 +81,15 @@ export default {
     },
   },
   methods: {
+ 
+    goCheck() {
+      uni.setStorageSync("checkdate", this.date);
+      uni.switchTab({
+        url: "/pages/check/index",
+      });
+    },
     dialogConfirm() {
-      uni.setStorageSync('checkdate',this.date)
+      uni.setStorageSync("checkdate", this.date);
       uni.switchTab({
         url: "/pages/check/index",
       });

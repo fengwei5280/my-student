@@ -8,7 +8,11 @@
       :modelValue="user"
     >
       <uni-forms-item label="手机号" required>
-        <uni-easyinput type=number v-model="user.name" placeholder="请输入手机号" />
+        <uni-easyinput
+          type="number"
+          v-model="user.name"
+          placeholder="请输入手机号"
+        />
       </uni-forms-item>
       <uni-forms-item label="密码" required>
         <uni-easyinput
