@@ -10,7 +10,7 @@
       <uni-forms-item label="手机号" required>
         <uni-easyinput
           type="number"
-          v-model="user.name"
+          v-model="user.tel"
           placeholder="请输入手机号"
         />
       </uni-forms-item>
@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import Vue from "vue";
 export default {
   components: {},
   data: () => ({
@@ -66,19 +67,50 @@ export default {
       teacher: 1,
       introduction: "",
       sex: 1,
-      mylist: [
-        { date: "2022-04-03", info: "异常" },
-        { date: "2022-04-04", info: "签到" },
-        { date: "2022-04-05", info: "签到" },
-        { date: "2022-04-06", info: "签到" },
-        { date: "2022-05-01", info: "签到" },
-      ],
     },
   }),
   computed: {},
   methods: {
     submit() {
-      console.log("121");
+      //获取系统信息
+      const res = uni.getSystemInfoSync();
+      //判断是h5还是小程序场景
+      let url = res.SDKVersion
+        ? "http://127.0.0.1:7000/api/login"
+        : "/api/login";
+      uni.request({
+        url, //仅为示例，并非真实接口地址。
+        data: {
+          user: this.user,
+        },
+        method: "post",
+        header: {
+          "content-type": "application/json", //自定义请求头信息
+        },
+        success: (res) => {
+          // 正常获取到用户登陆信息
+          console.log(res.data)
+          if (res.data && res.data.code == 0 && res.data.data.tel) {
+            const user = res.data.data;
+            uni.setStorageSync("user", user);
+            Vue.prototype.user = user;
+             console.log('12121212')
+            uni.switchTab({
+              url: "./../../pages/index/index",
+              fail: (e) => {
+                console.log(e);
+              },
+            });
+          } else {
+            // 用户信息异常，返回错误提示
+            uni.showToast({
+              title: res.data.data.msg,
+              duration: 2000,
+              icon: "error"
+            });
+          }
+        },
+      });
     },
     register() {
       console.log(121212);

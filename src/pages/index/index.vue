@@ -5,7 +5,7 @@
       :sub-title="userInfo.teacher == 1 ? '教师' : '学生'"
       :extra="userInfo.tel"
       style="width: 100%"
-      :thumbnail="userInfo.icon"
+      :thumbnail="userInfo.teacher == 1 ? '/static/teacher.png' : '/static/student.png'"
       @click="goDetail"
     >
       <text>{{
@@ -26,7 +26,6 @@ export default {
         name: "东山再起",
         title: "班主任老师",
         extInfo: "高级教授",
-        icon: "/static/teacher.png",
         desc: "学高为师 身正为范",
       },
       note: {
@@ -43,12 +42,9 @@ export default {
     const user = this.user || uni.getStorageSync("user");
     if (user && user.tel) {
       Object.assign(this.userInfo, user);
-      this.userInfo.icon = user.teacher
-        ? "/static/teacher.png"
-        : "/static/student.png";
     } else {
       uni.redirectTo({
-        url: "./../../pages/login/index",
+        url: "./../pages/login/index",
         fail: (e) => {
           console.log(e);
         },

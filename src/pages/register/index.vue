@@ -142,17 +142,22 @@ export default {
               uni.showToast({
                 title: "用户已注册！",
                 duration: 2000,
+                icon:'fail'
               });
             }
-            uni.switchTab({
-              url: "./../../pages/index/index",
+            uni.showToast({
+              title: "注册成功！",
+              duration: 2000,
+            });
+            uni.redirectTo({
+              url: "./../../pages/login/index",
               fail: (e) => {
                 console.log(1202321);
                 console.log(e);
               },
             });
-            uni.setStorageSync("user", this.user);
-            Vue.prototype.user = this.user;
+            // uni.setStorageSync("user", this.user);
+            // Vue.prototype.user = this.user;
             this.text = "request success";
           },
         });
