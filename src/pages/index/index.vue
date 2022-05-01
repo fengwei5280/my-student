@@ -1,9 +1,9 @@
 <template>
   <view class="content">
     <uni-card
-      :title="userInfo.name"
+      :title="userInfo.tel"
       :sub-title="userInfo.title"
-      :extra="userInfo.extInfo"
+      :extra="userInfo.name"
       style="width: 100%"
       :thumbnail="userInfo.icon"
     >
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import UserList from './components/list.vue'
+import UserList from "./components/list.vue";
 export default {
   components: { UserList },
   data() {
@@ -34,11 +34,20 @@ export default {
         //是否有异常
         normal: 1,
       },
-    
     };
   },
   mounted() {
-    console.log("123131");
+    console.log(this.user);
+    if (this.user && this.user.tel) {
+      Object.assign(this.userInfo, this.user);
+    } else {
+      uni.redirectTo({
+        url: "./../../pages/login/index",
+        fail:(e)=>{
+          console.log(e)
+        }
+      });
+    }
   },
   onLoad() {},
   methods: {},

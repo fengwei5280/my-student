@@ -7,30 +7,30 @@
       label-position="top"
       :modelValue="user"
     >
-      <uni-forms-item label="姓名" required>
-        <uni-easyinput
-          type="number"
-          v-model="user.name"
-          placeholder="请输入手机号"
-        /> </uni-forms-item>
-      <uni-forms-item label="手机号" required>
+      <uni-forms-item label="姓名" required name="name">
+        <uni-easyinput v-model="user.name" placeholder="请输入姓名" />
+      </uni-forms-item>
+      <uni-forms-item label="手机号" required name="tel">
         <uni-easyinput
           type="number"
           v-model="user.tel"
           placeholder="请输入手机号"
         />
       </uni-forms-item>
-      <uni-forms-item label="密码" required>
+      <uni-forms-item label="性别" required>
+        <uni-data-checkbox v-model="user.sex" :localdata="sexs" />
+      </uni-forms-item>
+      <uni-forms-item label="密码" required name="password">
         <uni-easyinput v-model="user.password" placeholder="请输入密码" />
       </uni-forms-item>
-      <uni-forms-item label="学号" required>
+      <uni-forms-item label="确认密码" required>
+        <uni-easyinput v-model="password" placeholder="请输入密码" />
+      </uni-forms-item>
+      <uni-forms-item label="学号" required name="number">
         <uni-easyinput v-model="user.number" placeholder="请输入年龄" />
       </uni-forms-item>
       <uni-forms-item label="居住地址" required>
-        <uni-easyinput
-          v-model="user.address"
-          placeholder="请输入年龄"
-        />
+        <uni-easyinput v-model="user.address" placeholder="请输入年龄" />
       </uni-forms-item>
     </uni-forms>
     <view class="button-group">
@@ -41,16 +41,37 @@
 </template>
 
 <script>
+import Vue from "vue";
 export default {
   components: {},
   data: () => ({
     // 自定义表单校验规则
+    password: "",
+    // 单选数据源
+    sexs: [
+      {
+        text: "男",
+        value: 0,
+      },
+      {
+        text: "女",
+        value: 1,
+      },
+    ],
     customRules: {
       name: {
         rules: [
           {
             required: true,
             errorMessage: "姓名不能为空",
+          },
+        ],
+      },
+      tel: {
+        rules: [
+          {
+            required: true,
+            errorMessage: "电话不能为空",
           },
         ],
       },
@@ -66,26 +87,57 @@ export default {
     user: {
       name: "",
       password: "",
-      age: "",
       icon: "",
       // 1是老师，2是学生
       teacher: 1,
-      tel:'',
+      tel: "",
       introduction: "",
       sex: 1,
-      mylist: [
-        { date: "2022-04-03", info: "异常" },
-        { date: "2022-04-04", info: "签到" },
-        { date: "2022-04-05", info: "签到" },
-        { date: "2022-04-06", info: "签到" },
-        { date: "2022-05-01", info: "签到" },
-      ],
     },
   }),
   computed: {},
+  mounted() {
+    // 设置自定义表单校验规则，必须在节点渲染完毕后执行
+    console.log("readyyyxxy");
+    console.log(this.$refs.baseForm);
+    setTimeout(() => {
+      this.$refs.baseForm.setRules(this.customRules);
+    }, 200);
+  },
   methods: {
     submit() {
-      console.log("121");
+      this.$refs["baseForm"].validate().then(() => {
+        uni.request({
+          url: "/api/addUser", //仅为示例，并非真实接口地址。
+          data: {
+            user: this.user,
+          },
+          method: "post",
+          header: {
+            "content-type": "application/json", //自定义请求头信息
+          },
+          success: (res) => {
+            console.log(res.data);
+            if (res.data && res.data.data.exsit == 1) {
+              //用户已注册，轻微
+              uni.showToast({
+                title: "用户已注册！",
+                duration: 2000,
+              });
+            }
+            uni.switchTab({
+              url: "./../../pages/index/index",
+              fail: (e) => {
+                console.log(1202321);
+                console.log(e);
+              },
+            });
+            uni.setStorageSync("user", this.user);
+            Vue.prototype.user = this.user;
+            this.text = "request success";
+          },
+        });
+      });
     },
     register() {
       console.log(121212);

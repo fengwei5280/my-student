@@ -79,7 +79,7 @@ export default {
     register() {
       console.log(121212);
       uni.redirectTo({
-        url: "register/index",
+        url: "./../register/index",
         fail: (e) => {
           console.log("11", e);
         },
