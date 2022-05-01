@@ -28,6 +28,16 @@
               @fail="fail"
             />
           </uni-forms-item>
+          <uni-forms-item label="行程码" required>
+            <uni-file-picker
+              v-model="baseFormData.xingchen"
+              fileMediatype="image"
+              mode="grid"
+              @select="select"
+              @progress="progress"
+              @fail="fail"
+            />
+          </uni-forms-item>
         </uni-forms>
       </view>
     </uni-section>
@@ -42,12 +52,13 @@ export default {
         name: "",
         age: "",
         introduction: "",
-        sex: 0, 
+        sex: 0,
         imageValue: [],
         number: "",
         phone: "",
         address: "",
         datetimesingle: 1627529992399,
+        xingchen:""
       },
       checkdate: "",
       // 自定义表单校验规则

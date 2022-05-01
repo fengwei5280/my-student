@@ -11,11 +11,11 @@
       </template>
       <view class="card-actions no-border">
         <view class="card-actions-item" @click="actionsClick('分享')">
-          <uni-icons type="chatboxes" size="18" color="#999"></uni-icons>
+          <uni-icons type="chatboxes" size="23" color="#999"></uni-icons>
           <text class="card-actions-item-text">上报</text>
         </view>
         <view class="card-actions-item" @click="actionsClick('点赞')">
-          <uni-icons type="chatbubble" size="18" color="#999"></uni-icons>
+          <uni-icons type="chatbubble" size="23" color="#999"></uni-icons>
           <text class="card-actions-item-text">请假</text>
         </view>
       </view>
@@ -149,7 +149,7 @@ export default {
 }
 
 .card-actions-item-text {
-  font-size: 12px;
+  font-size: 16px;
   color: #666;
   margin-left: 5px;
 }

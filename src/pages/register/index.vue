@@ -20,6 +20,9 @@
       <uni-forms-item label="性别" required>
         <uni-data-checkbox v-model="user.sex" :localdata="sexs" />
       </uni-forms-item>
+      <uni-forms-item label="岗位" required>
+        <uni-data-checkbox v-model="user.teacher" :localdata="teachers" />
+      </uni-forms-item>
       <uni-forms-item label="密码" required name="password">
         <uni-easyinput v-model="user.password" placeholder="请输入密码" />
       </uni-forms-item>
@@ -56,6 +59,16 @@ export default {
       {
         text: "女",
         value: 1,
+      },
+    ],
+    teachers:[
+      {
+        text: "教师",
+        value: 1,
+      },
+      {
+        text: "学生",
+        value: 2,
       },
     ],
     customRules: {

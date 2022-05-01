@@ -1,13 +1,15 @@
 <template>
   <view class="content">
     <uni-card
-      :title="userInfo.tel"
-      :sub-title="userInfo.title"
-      :extra="userInfo.name"
+      :title="userInfo.name"
+      :sub-title="userInfo.teacher == 1 ? '教师' : '学生'"
+      :extra="userInfo.tel"
       style="width: 100%"
       :thumbnail="userInfo.icon"
     >
-      <text>{{ userInfo.desc }}</text>
+      <text>{{
+        userInfo.teacher == 1 ? userInfo.desc : "好好学习，天天向上"
+      }}</text>
     </uni-card>
     <user-list />
   </view>
@@ -37,15 +39,18 @@ export default {
     };
   },
   mounted() {
-    console.log(this.user);
-    if (this.user && this.user.tel) {
-      Object.assign(this.userInfo, this.user);
+    const user = this.user || uni.getStorageSync("user");
+    if (user && user.tel) {
+      Object.assign(this.userInfo, user);
+      this.userInfo.icon = user.teacher
+        ? "/static/teacher.png"
+        : "/static/student.png";
     } else {
       uni.redirectTo({
         url: "./../../pages/login/index",
-        fail:(e)=>{
-          console.log(e)
-        }
+        fail: (e) => {
+          console.log(e);
+        },
       });
     }
   },
