@@ -5,29 +5,84 @@
       :sub-title="userInfo.teacher == 1 ? '教师' : '学生'"
       :extra="userInfo.tel"
       style="width: 100%"
-      :thumbnail="userInfo.teacher == 1 ? '/static/teacher.png' : '/static/student.png'"
+      :thumbnail="
+        userInfo.teacher == 1 ? '/static/teacher.png' : '/static/student.png'
+      "
       @click="goDetail"
     >
       <text>{{
         userInfo.teacher == 1 ? userInfo.desc : "好好学习，天天向上"
       }}</text>
     </uni-card>
-    <user-list />
+    <template v-if="userInfo.teacher == 1">
+      <uni-grid :column="3" :square="false" :highlight="false">
+        <uni-grid-item
+          v-for="(item, index) in list"
+          :index="index"
+          :key="index"
+        >
+          <view class="grid-item-box">
+            <image :src="item.url" class="image" mode="aspectFill" />
+            <text class="text">{{ item.text }}</text>
+            <view class="grid-dot">
+              <uni-badge :text="item.badge" :type="item.type" />
+            </view>
+          </view>
+        </uni-grid-item>
+      </uni-grid>
+      <uni-section style="width: 100%" title="学生打卡信息列表" type="line">
+        <uni-list>
+          <uni-list-item
+            v-for="(item, index) in userList"
+            :key="index"
+            :title="item.name"
+            :note="item.tel"
+            :thumb="item.icon"
+            thumb-size="base"
+            :rightText="item.normal?'正常打卡':'异常打卡'"
+          />
+        </uni-list>
+      </uni-section>
+    </template>
+    <template v-else>
+      <student-info />
+    </template>
   </view>
 </template>
 
 <script>
-import UserList from "./components/list.vue";
+import studentInfo from "./components/list.vue";
 export default {
-  components: { UserList },
+  components: { studentInfo },
   data() {
     return {
       userInfo: {
         name: "东山再起",
         title: "班主任老师",
         extInfo: "高级教授",
-        desc: "学高为师 身正为范",
+        desc: "学高为师，身正为范",
       },
+      userList: [],
+      list: [
+        {
+          url: "/static/c1.png",
+          text: "上报人数",
+          badge: 45,
+          type: "success",
+        },
+        {
+          url: "/static/c2.png",
+          text: "未报人数",
+          badge: 2,
+          type: "warning",
+        },
+        {
+          url: "/static/c3.png",
+          text: "异常人数",
+          badge: 1,
+          type: "error",
+        },
+      ],
       note: {
         //日期
         date: "2022-04-26",
@@ -39,6 +94,7 @@ export default {
     };
   },
   mounted() {
+    this.getUserList();
     const user = this.user || uni.getStorageSync("user");
     if (user && user.tel) {
       Object.assign(this.userInfo, user);
@@ -53,15 +109,45 @@ export default {
   },
   onLoad() {},
   methods: {
+    getMoble() {
+      var prefixArray = new Array(
+        "130",
+        "131",
+        "132",
+        "133",
+        "135",
+        "137",
+        "138",
+        "170",
+        "187",
+        "189"
+      );
+      var i = parseInt(10 * Math.random());
+      var prefix = prefixArray[i];
+      for (var j = 0; j < 8; j++) {
+        prefix = prefix + Math.floor(Math.random() * 10);
+      }
+      return prefix;
+    },
+    getUserList() {
+      for (var i = 1; i < 19; i++) {
+        this.userList.push({
+          icon: "/static/userIcon/" + i + ".png",
+          name: "学生" + i,
+          tel: this.getMoble(),
+          normal: Math.round(Math.random(0, 1)),
+        });
+      }
+    },
     goDetail() {
-      console.log(1212)
+      console.log(1212);
       uni.redirectTo({
         url: "./../login/index",
         fail: (e) => {
           console.log("11", e);
         },
       });
-    }
+    },
   },
 };
 </script>
@@ -90,3 +176,51 @@ export default {
   color: #8f8f94;
 }
 </style>
+<style lang="scss">
+.image {
+  width: 25px;
+  height: 25px;
+}
+
+.text {
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.grid-dynamic-box {
+  margin-bottom: 15px;
+}
+
+.grid-item-box {
+  flex: 1;
+  // position: relative;
+  /* #ifndef APP-NVUE */
+  display: flex;
+  /* #endif */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 0;
+}
+
+.grid-item-box-row {
+  flex: 1;
+  // position: relative;
+  /* #ifndef APP-NVUE */
+  display: flex;
+  /* #endif */
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 0;
+}
+
+.grid-dot {
+  position: absolute;
+  top: 5px;
+  right: 15px;
+}
+
+/* #endif */
+</style>
+
