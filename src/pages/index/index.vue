@@ -2,8 +2,8 @@
   <view class="content">
     <uni-card
       :title="userInfo.name"
-      :sub-title="userInfo.teacher == 1 ? '教师' : '学生'"
-      :extra="userInfo.tel"
+      :sub-title="userInfo.teacher == 1 ? '教师1' : '学生'"
+      :extra="new Date().toLocaleDateString()"
       style="width: 100%"
       :thumbnail="
         userInfo.teacher == 1 ? '/static/teacher.png' : '/static/student.png'
@@ -15,7 +15,7 @@
       }}</text>
     </uni-card>
     <template v-if="userInfo.teacher == 1">
-      <uni-grid :column="3" :square="false" :highlight="false">
+      <!-- <uni-grid :column="3" :square="false" :highlight="false">
         <uni-grid-item
           v-for="(item, index) in list"
           :index="index"
@@ -29,18 +29,30 @@
             </view>
           </view>
         </uni-grid-item>
-      </uni-grid>
+      </uni-grid> -->
+
+      <view class="uni-padding-wrap uni-common-mt">
+        <uni-segmented-control
+          :current="current"
+          :values="items"
+          :style-type="styleType"
+          :active-color="activeColor"
+          @clickItem="onClickItem"
+        />
+      </view>
       <uni-section style="width: 100%" title="学生打卡信息列表" type="line">
         <uni-list>
-          <uni-list-item
-            v-for="(item, index) in userList"
-            :key="index"
-            :title="item.name"
-            :note="item.class"
-            :thumb="item.icon"
-            thumb-size="base"
-            :rightText="item.normal ? '正常打卡' : '异常打卡'"
-          />
+          <template v-for="(item, index) in userList">
+            <uni-list-item
+              v-if="current == 0 || current == item.normal"
+              :key="index"
+              :title="item.name"
+              :note="item.class"
+              :thumb="item.icon"
+              thumb-size="base"
+              :rightText="item.normal == 1 ? '正常打卡' : '异常打卡'"
+            />
+          </template>
         </uni-list>
       </uni-section>
     </template>
@@ -62,7 +74,11 @@ export default {
         extInfo: "高级教授",
         desc: "学高为师，身正为范",
       },
+      current: 0,
+      activeColor: "#456fff",
+      styleType: "button",
       userList: [],
+      items: ["全部人数:", "未报人数:", "异常人数:"],
       list: [
         {
           url: "/static/c1.png",
@@ -94,7 +110,6 @@ export default {
     };
   },
   mounted() {
-    this.getUserList();
     const user = this.user || uni.getStorageSync("user");
     if (user && user.tel) {
       Object.assign(this.userInfo, user);
@@ -107,10 +122,16 @@ export default {
       });
     }
     // 获取真实用户数据
+    this.getUserList();
     this.getRealList();
   },
   onLoad() {},
   methods: {
+    onClickItem(e) {
+      if (this.current !== e.currentIndex) {
+        this.current = e.currentIndex;
+      }
+    },
     getRealList() {
       const res = uni.getSystemInfoSync();
       //判断是h5还是小程序场景
@@ -127,6 +148,14 @@ export default {
                 "/static/userIcon/" + Math.ceil(Math.random() * 10) + ".png";
             });
           this.userList = [...res.data.data, ...this.userList];
+          this.items[0] = "全部人数:" + this.userList.length;
+          this.items[1] =
+            "正常人数:" +
+            this.userList.filter((item) => item.normal == 1).length;
+          this.items[2] =
+            "异常人数:" +
+            this.userList.filter((item) => item.normal == 2).length;
+          this.items = [...this.items];
           // 正常获取到用户登陆信息
         },
       });
@@ -164,7 +193,7 @@ export default {
         "21级-电子商务",
         "21级-财务管理",
       ];
-      return classes[Math.ceil(Math.random()*10)-1]
+      return classes[Math.ceil(Math.random() * 10) - 1];
     },
     getUserList() {
       for (var i = 1; i < 19; i++) {
@@ -172,8 +201,8 @@ export default {
           icon: "/static/userIcon/" + i + ".png",
           name: "学生" + i,
           tel: this.getMoble(),
-          normal: Math.round(Math.random(0, 1)),
-          class:this.getRandomClass()
+          normal: Math.round(Math.random(0, 1)) == 1 ? 1 : 2,
+          class: this.userInfo.class,
         });
       }
     },
@@ -262,3 +291,15 @@ export default {
 /* #endif */
 </style>
 
+<style lang="scss">
+.uni-common-mt {
+  margin-top: 0px;
+}
+
+.uni-padding-wrap {
+  width: 90%;
+}
+.uni-list-item__content-title {
+  font-size: 14px;
+}
+</style>

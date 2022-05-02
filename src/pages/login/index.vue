@@ -156,7 +156,7 @@ export default {
     border-radius: 30px;
     margin-bottom: 20px;
     line-height: 62px;
-    font-weight: 800;
+    font-weight: 800 ;
     &::after {
       border: unset;
     }

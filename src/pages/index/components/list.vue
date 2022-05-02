@@ -4,9 +4,7 @@
       <template v-slot:cover>
         <view class="custom-cover" >
           <image class="cover-image" mode="aspectFill" :src="cover"> </image>
-          <!-- <view class="cover-content">
-            <text class="uni-subtitle uni-white">打卡情况</text>
-          </view> -->
+        
         </view>
       </template>
       <view class="card-actions no-border">
@@ -130,20 +128,6 @@ export default {
   position: relative;
 }
 
-.cover-content {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 40px;
-  background-color: rgba($color: #000000, $alpha: 0.4);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding-left: 15px;
-  font-size: 14px;
-  color: #fff;
-}
 
 .card-actions {
   display: flex;
