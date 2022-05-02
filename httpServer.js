@@ -15,9 +15,8 @@ const users = [{
     sex: 1
 }];
 const list = {
-    18362951234: [
-        { date: '2022-05-01', info: "异常", normal: 1 }
-    ]
+    // 18362951234: 
+    //     { date: '2022-05-01', info: "异常", normal: 1 }
 }
 // 获取用户列表
 app.get('/api/getUsers', (req, res) => {
@@ -36,6 +35,27 @@ app.get('/api/getUserInfo', (req, res) => {
     res.send({
         code: 0,
         data: user
+    })
+})
+// 添加用户打卡信息
+app.post('/api/addCheckInfo', jsonParser, (req, res) => {
+    let checkInfo = req.body.checkInfo
+    console.log('----------学生' + checkInfo.name + '打卡成功--------')
+    list[checkInfo.tel] = checkInfo
+    res.send({
+        code: 0,
+        data: {
+            msg: '打卡成功!'
+        }
+    })
+})
+// 获取用户打卡列表
+app.get('/api/getCheckList', (req, res) => {
+    console.log('----------查询学生打卡信息--------')
+    const formatList = Object.values(list)
+    res.send({
+        code: 0,
+        data: formatList
     })
 })
 // 用户登陆

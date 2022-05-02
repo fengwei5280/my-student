@@ -11,11 +11,39 @@
           :rules="customRules"
           :modelValue="baseFormData"
         >
+          <uni-forms-item label="学生名称">
+            <view class="tag-view">
+              <uni-easyinput
+                disabled
+                :value="user.name"
+                placeholder="请输入内容"
+              ></uni-easyinput>
+              <!-- <uni-tag :text="user.name" :inverted="true" type="default" /> -->
+            </view>
+          </uni-forms-item>
+          <uni-forms-item label="学生性别">
+            <view class="tag-view">
+              <uni-easyinput
+                disabled
+                :value="user.sex == 1 ? '男' : '女'"
+                placeholder="请输入内容"
+              ></uni-easyinput>
+            </view>
+          </uni-forms-item>
+          <uni-forms-item label="班级">
+            <view class="tag-view">
+              <uni-easyinput
+                disabled
+                :value="user.class"
+                placeholder="请输入内容"
+              ></uni-easyinput>
+            </view>
+          </uni-forms-item>
           <uni-forms-item label="打卡时间">
             <uni-datetime-picker
               type="date"
-              return-type="date"
-              v-model="checkdate"
+              return-type="string"
+              v-model="baseFormData.date"
             />
           </uni-forms-item>
           <uni-forms-item label="三码合一" required>
@@ -38,7 +66,19 @@
               @fail="fail"
             />
           </uni-forms-item>
+          <uni-forms-item label="是否异常" required>
+            <uni-data-checkbox
+              v-model="baseFormData.normal"
+              :localdata="normals"
+            />
+          </uni-forms-item>
         </uni-forms>
+        <view class="button-group">
+          <!-- <button type="primary" size="mini" @click="add">新增</button> -->
+          <button type="primary" class="btn" @click="submit('baseForm')">
+            打卡
+          </button>
+        </view>
       </view>
     </uni-section>
   </view>
@@ -47,20 +87,25 @@
 export default {
   data() {
     return {
+      user: {},
       // 基础表单数据
       baseFormData: {
-        name: "",
-        age: "",
-        introduction: "",
-        sex: 0,
         imageValue: [],
-        number: "",
-        phone: "",
-        address: "",
-        datetimesingle: 1627529992399,
-        xingchen:""
+        normal: 1,
+        xingchen: [],
+        date: "",
       },
       checkdate: "",
+      normals: [
+        {
+          text: "正常",
+          value: 1,
+        },
+        {
+          text: "异常",
+          value: 2,
+        },
+      ],
       // 自定义表单校验规则
       customRules: {
         name: {
@@ -105,10 +150,24 @@ export default {
       return "left";
     },
   },
+  mounted() {
+    const user = uni.getStorageSync("user");
+    console.log(user, "=-=-=");
+    if (user && user.tel) {
+      this.user = user;
+    } else {
+      uni.redirectTo({
+        url: "./../pages/login/index",
+        fail: (e) => {
+          console.log(e);
+        },
+      });
+    }
+  },
   onShow() {
     const checkdate = uni.getStorageSync("checkdate");
     if (checkdate) {
-      this.checkdate = checkdate;
+      this.user.date = checkdate;
     }
   },
   onLoad() {},
@@ -159,10 +218,47 @@ export default {
     submit(ref) {
       this.$refs[ref]
         .validate()
-        .then((res) => {
-          console.log("success", res);
-          uni.showToast({
-            title: `校验通过`,
+        .then(() => {
+          let checkInfo = Object.assign(this.user, this.baseFormData);
+          console.log("用户打卡信息" + JSON.stringify(checkInfo));
+          const res = uni.getSystemInfoSync();
+          // "http://127.0.0.1:7000/api/addUser"
+          let url = res.SDKVersion
+            ? "http://127.0.0.1:7000/api/addCheckInfo"
+            : "/api/addCheckInfo";
+          console.log(res);
+          uni.request({
+            url, //仅为示例，并非真实接口地址。
+            data: {
+              checkInfo,
+            },
+            method: "post",
+            header: {
+              "content-type": "application/json", //自定义请求头信息
+            },
+            success: (res) => {
+              uni.showToast({
+                title: "恭喜你打开成功!",
+                duration: 2000,
+              });
+              setTimeout(() => {
+                uni.switchTab({
+                  url: "/pages/index/index",
+                  fail: (e) => {
+                    console.log(1202321);
+                    console.log(e);
+                  },
+                });
+              }, 1000);
+
+              // uni.redirectTo({
+              //   url: "./../../pages/login/index",
+              //   fail: (e) => {
+              //     console.log(1202321);
+              //     console.log(e);
+              //   },
+              // });
+            },
           });
         })
         .catch((err) => {
@@ -199,5 +295,19 @@ export default {
   align-items: center;
   height: 35px;
   margin-left: 10px;
+}
+.tag-view {
+  width: 90%;
+  margin-top: 0px;
+}
+.button-group {
+  .btn {
+    width: 275px;
+    height: 62px;
+    border-radius: 30px;
+    margin-bottom: 20px;
+    line-height: 62px;
+    font-weight: 800;
+  }
 }
 </style>

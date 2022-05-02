@@ -36,10 +36,10 @@
             v-for="(item, index) in userList"
             :key="index"
             :title="item.name"
-            :note="item.tel"
+            :note="item.class"
             :thumb="item.icon"
             thumb-size="base"
-            :rightText="item.normal?'正常打卡':'异常打卡'"
+            :rightText="item.normal ? '正常打卡' : '异常打卡'"
           />
         </uni-list>
       </uni-section>
@@ -106,9 +106,31 @@ export default {
         },
       });
     }
+    // 获取真实用户数据
+    this.getRealList();
   },
   onLoad() {},
   methods: {
+    getRealList() {
+      const res = uni.getSystemInfoSync();
+      //判断是h5还是小程序场景
+      let url = res.SDKVersion
+        ? "http://127.0.0.1:7000/api/getCheckList"
+        : "/api/getCheckList";
+      uni.request({
+        url, //仅为示例，并非真实接口地址。
+        success: (res) => {
+          console.log(res);
+          if (res.data.code == 0 && res.data.data)
+            res.data.data.forEach((element) => {
+              element.icon =
+                "/static/userIcon/" + Math.ceil(Math.random() * 10) + ".png";
+            });
+          this.userList = [...res.data.data, ...this.userList];
+          // 正常获取到用户登陆信息
+        },
+      });
+    },
     getMoble() {
       var prefixArray = new Array(
         "130",
@@ -129,6 +151,21 @@ export default {
       }
       return prefix;
     },
+    getRandomClass() {
+      //随机生成一个班级名称
+      let classes = [
+        "19级-计算机网络",
+        "19级-电子商务",
+        "19级-财务管理",
+        "20级-计算机网络",
+        "20级-电子商务",
+        "20级-财务管理",
+        "21级-计算机网络",
+        "21级-电子商务",
+        "21级-财务管理",
+      ];
+      return classes[Math.ceil(Math.random()*10)-1]
+    },
     getUserList() {
       for (var i = 1; i < 19; i++) {
         this.userList.push({
@@ -136,6 +173,7 @@ export default {
           name: "学生" + i,
           tel: this.getMoble(),
           normal: Math.round(Math.random(0, 1)),
+          class:this.getRandomClass()
         });
       }
     },

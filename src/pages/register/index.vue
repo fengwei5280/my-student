@@ -20,8 +20,18 @@
       <uni-forms-item label="性别" required>
         <uni-data-checkbox v-model="user.sex" :localdata="sexs" />
       </uni-forms-item>
-      <uni-forms-item label="岗位" required>
+      <uni-forms-item label="身份" required>
         <uni-data-checkbox v-model="user.teacher" :localdata="teachers" />
+      </uni-forms-item>
+      <uni-forms-item label="班级" required name="number">
+        <!-- <uni-easyinput v-model="user.class" placeholder="请输入班级" /> -->
+        <uni-data-picker
+          placeholder="请选择班级"
+          popup-title="请选择所在班级"
+          :localdata="dataTree"
+          v-model="user.class"
+        >
+        </uni-data-picker>
       </uni-forms-item>
       <uni-forms-item label="密码" required name="password">
         <uni-easyinput v-model="user.password" placeholder="请输入密码" />
@@ -32,6 +42,7 @@
       <uni-forms-item label="学号" required name="number">
         <uni-easyinput v-model="user.number" placeholder="请输入年龄" />
       </uni-forms-item>
+
       <uni-forms-item label="居住地址" required>
         <uni-easyinput v-model="user.address" placeholder="请输入年龄" />
       </uni-forms-item>
@@ -61,6 +72,8 @@ export default {
         value: 1,
       },
     ],
+    //班级信息
+    class: "",
     teachers: [
       {
         text: "教师",
@@ -69,6 +82,62 @@ export default {
       {
         text: "学生",
         value: 2,
+      },
+    ],
+    dataTree: [
+      {
+        text: "19级",
+        value: "1-0",
+        children: [
+          {
+            text: "计算机网络",
+            value: "19级-计算机网络",
+          },
+          {
+            text: "电子商务",
+            value: "19级-电子商务",
+          },
+          {
+            text: "财务管理",
+            value: "19级-财务管理",
+          },
+        ],
+      },
+      {
+        text: "20级",
+        value: "2-0",
+        children: [
+          {
+            text: "计算机网络",
+            value: "20级-计算机网络",
+          },
+          {
+            text: "电子商务",
+            value: "20级-电子商务",
+          },
+          {
+            text: "财务管理",
+            value: "20级-财务管理",
+          },
+        ],
+      },
+      {
+        text: "21级",
+        value: "3-0",
+        children: [
+          {
+            text: "计算机网络",
+            value: "21级-计算机网络",
+          },
+          {
+            text: "电子商务",
+            value: "21级-电子商务",
+          },
+          {
+            text: "财务管理",
+            value: "21级-财务管理",
+          },
+        ],
       },
     ],
     customRules: {
@@ -106,6 +175,7 @@ export default {
       tel: "",
       introduction: "",
       sex: 1,
+      class: "",
     },
   }),
   computed: {},
@@ -142,7 +212,7 @@ export default {
               uni.showToast({
                 title: "用户已注册！",
                 duration: 2000,
-                icon:'fail'
+                icon: "fail",
               });
             }
             uni.showToast({
@@ -170,26 +240,6 @@ export default {
       });
     },
   },
-  watch: {},
-
-  // 页面周期函数--监听页面加载
-  onLoad() {},
-  // 页面周期函数--监听页面初次渲染完成
-  onReady() {},
-  // 页面周期函数--监听页面显示(not-nvue)
-  onShow() {},
-  // 页面周期函数--监听页面隐藏
-  onHide() {},
-  // 页面周期函数--监听页面卸载
-  onUnload() {},
-  // 页面处理函数--监听用户下拉动作
-  // onPullDownRefresh() { uni.stopPullDownRefresh(); },
-  // 页面处理函数--监听用户上拉触底
-  // onReachBottom() {},
-  // 页面处理函数--监听页面滚动(not-nvue)
-  // onPageScroll(event) {},
-  // 页面处理函数--用户点击右上角分享
-  // onShareAppMessage(options) {},
 };
 </script>
 
